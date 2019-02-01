@@ -1,0 +1,58 @@
+management:
+  endpoints:
+   web:
+      base-path: /
+      exposure:
+        include: referesh,health,metrics
+##  security:
+#   enabled: false
+  
+ribbon:
+  eureka:
+    enabled: false
+
+zuul:
+  host:
+    connect-timeout-millis: 15000
+    socket-timeout-millis:  15000
+    
+
+#logging:
+#  level: 
+#    root: INFO
+#    com.gateway: INFO
+#    com.springframework: WARN
+#  pattern:
+#    console: "[%d{yyyy-MM-dd HH  "
+#    
+
+---
+spring:
+  profiles: default
+  
+zuul:
+  routes:
+    errorfilter:
+      enabled: true
+    user-api:
+      path: /**
+      strip-prefix: false
+      url: http://localhost:8082
+    admins:
+      strip-prefix: false
+      path: /check/**
+      url: http://localhost:8083
+      
+      
+---
+spring:
+  profiles: develop
+  
+zuul:
+  routes:
+    errorfilter:
+      enabled: true
+    users:
+      url: http://localhost:8081
+    admins:
+      url: http://localhost:8082
